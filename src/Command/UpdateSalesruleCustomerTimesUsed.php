@@ -5,7 +5,7 @@ namespace IntegerNet\RegenerateCouponUses\Command;
 
 use Magento\Framework\App\ResourceConnection;
 
-class UpdateSalesruleCouponUsageTimesUsed
+class UpdateSalesruleCustomerTimesUsed
 {
     public function __construct(
         private readonly ResourceConnection $resourceConnection
@@ -13,22 +13,22 @@ class UpdateSalesruleCouponUsageTimesUsed
     }
 
     /**
-     * @param array|int[][] $usedQtyByCouponIdAndCustomerId
+     * @param array|int[][] $usedQtyByRuleIdAndCustomerId
      */
-    public function execute(array $usedQtyByCouponIdAndCustomerId): void
+    public function execute(array $usedQtyByRuleIdAndCustomerId): void
     {
-        if (empty($usedQtyByCouponIdAndCustomerId)) {
+        if (empty($usedQtyByRuleIdAndCustomerId)) {
             return;
         }
 
         $rowsToInsert = [];
-        foreach ($usedQtyByCouponIdAndCustomerId as $couponId => $usedQtyByCustomerId) {
+        foreach ($usedQtyByRuleIdAndCustomerId as $ruleId => $usedQtyByCustomerId) {
             foreach ($usedQtyByCustomerId as $customerId => $usedQty) {
                 if ($customerId == 0) {
                     continue;
                 }
                 $rowsToInsert[] = [
-                    'coupon_id' => $couponId,
+                    'rule_id' => $ruleId,
                     'customer_id' => $customerId,
                     'times_used' => $usedQty,
                 ];
@@ -38,8 +38,8 @@ class UpdateSalesruleCouponUsageTimesUsed
         $connection = $this->resourceConnection->getConnection();
 
         $connection->insertArray(
-            $connection->getTableName('salesrule_coupon_usage'),
-            ['coupon_id', 'customer_id', 'times_used'],
+            $connection->getTableName('salesrule_customer'),
+            ['rule_id', 'customer_id', 'times_used'],
             $rowsToInsert,
             \Magento\Framework\DB\Adapter\AdapterInterface::REPLACE
         );
