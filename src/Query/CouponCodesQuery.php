@@ -7,6 +7,8 @@ use Magento\Framework\App\ResourceConnection;
 
 class CouponCodesQuery
 {
+    private ?array $couponDataRows = null;
+
     public function __construct(
         private readonly ResourceConnection $resourceConnection
     ) {
@@ -29,19 +31,6 @@ class CouponCodesQuery
      */
     public function getUsedQtyGroupedByCouponCode(): array
     {
-        return array_map(
-            function (array $qtyByCustomerId): int {
-                return array_sum($qtyByCustomerId);
-            },
-            $this->getUsedQtyGroupedByCouponCodeAndCustomerId()
-        );
-    }
-
-    /**
-     * @return array|int[][]
-     */
-    public function getUsedQtyGroupedByCouponCodeAndCustomerId(): array
-    {
         $couponUsageByCodeAndCustomerId = [];
         foreach ($this->getCouponDataRows() as $row) {
             $couponCode = $row['coupon_code'];
@@ -50,7 +39,28 @@ class CouponCodesQuery
                 = ($couponUsageByCodeAndCustomerId[$couponCode][$customerId] ?? 0) + 1;
         }
 
-        return $couponUsageByCodeAndCustomerId;
+        return array_map(
+            function (array $qtyByCustomerId): int {
+                return array_sum($qtyByCustomerId);
+            },
+            $couponUsageByCodeAndCustomerId
+        );
+    }
+
+    /**
+     * @return array|int[][]
+     */
+    public function getUsedQtyGroupedByCouponIdAndCustomerId(): array
+    {
+        $couponUsageByCouponIdAndCustomerId = [];
+        foreach ($this->getCouponDataRows() as $row) {
+            $couponId = $row['coupon_id'];
+            $customerId = $row['customer_id'] ?? 0;
+            $couponUsageByCouponIdAndCustomerId[$couponId][$customerId]
+                = ($couponUsageByCouponIdAndCustomerId[$couponId][$customerId] ?? 0) + 1;
+        }
+
+        return $couponUsageByCouponIdAndCustomerId;
     }
 
     /**
@@ -74,22 +84,26 @@ class CouponCodesQuery
      */
     private function getCouponDataRows(): array
     {
-        $connection = $this->resourceConnection->getConnection();
+        if ($this->couponDataRows === null) {
+            $connection = $this->resourceConnection->getConnection();
 
-        $query = $connection->select()
-            ->from(
-                ['order' => $connection->getTableName('sales_order')],
-                ['coupon_code', 'customer_id']
-            )
-            ->where(
-                'order.state NOT IN (\'canceled\')'
-            )
-            ->joinInner(
-                ['coupon' => $connection->getTableName('salesrule_coupon')],
-                'order.coupon_code = coupon.code',
-                ['rule_id']
-            );
+            $query = $connection->select()
+                ->from(
+                    ['order' => $connection->getTableName('sales_order')],
+                    ['coupon_code', 'customer_id']
+                )
+                ->where(
+                    'order.state NOT IN (\'canceled\')'
+                )
+                ->joinInner(
+                    ['coupon' => $connection->getTableName('salesrule_coupon')],
+                    'order.coupon_code = coupon.code',
+                    ['rule_id', 'coupon_id']
+                );
 
-        return $connection->fetchAll($query);
+            $this->couponDataRows = $connection->fetchAll($query);
+        }
+
+        return $this->couponDataRows;
     }
 }
