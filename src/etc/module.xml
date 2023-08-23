@@ -3,6 +3,7 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
     <module name="IntegerNet_RegenerateCouponUses">
         <sequence>
+            <module name="Steiff_SalesRule"/>
         </sequence>
     </module>
 </config>
