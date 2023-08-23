@@ -1,6 +1,6 @@
 <?php
 
-namespace :module-namespace\:module-name;
+namespace IntegerNet\RegenerateCouponUses;
 
 use PHPUnit\Framework\TestCase;
 use Magento\TestFramework\Helper\Bootstrap;
