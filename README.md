@@ -11,6 +11,9 @@
 
 Regenerate coupon uses via command line so coupons cannot be used twice.
 
+This can be used  if the Message Queue consumer `sales.rule.update.coupon.usage` wasn't running successfully and coupon usages haven't been recorded.
+Make sure that the consumer runs again after this command has been executed.
+
 ## Installation
 
 1. Install it into your Magento 2 project with composer:
@@ -23,13 +26,11 @@ Regenerate coupon uses via command line so coupons cannot be used twice.
     bin/magento setup:upgrade
     ```
 
-## Configuration
-
 ## Usage
 
-## Changelog
+Execute on the command line:
 
-Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
+    bin/magento coupon:usage:regenerate
 
 ## Contributing
 
