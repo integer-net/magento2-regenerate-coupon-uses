@@ -3,17 +3,16 @@
 
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Software License][ico-license]](LICENSE.md)
-[![Build Status][ico-travis]][link-travis]
 ![Supported Magento Versions][ico-compatibility]
 
-[![Coverage Status][ico-scrutinizer]][link-scrutinizer]
-[![Quality Score][ico-code-quality]][link-code-quality]
-[![Maintainability][ico-maintainability]][link-maintainability]
 </div>
 
 ---
 
 Regenerate coupon uses via command line so coupons cannot be used twice.
+
+This can be used  if the Message Queue consumer `sales.rule.update.coupon.usage` wasn't running successfully and coupon usages haven't been recorded.
+Make sure that the consumer runs again after this command has been executed.
 
 ## Installation
 
@@ -27,37 +26,15 @@ Regenerate coupon uses via command line so coupons cannot be used twice.
     bin/magento setup:upgrade
     ```
 
-## Configuration
-
 ## Usage
 
-## Changelog
+Execute on the command line:
 
-Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
+    bin/magento coupon:usage:regenerate
 
 ## Contributing
 
 Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
-
-## Testing
-
-### Unit Tests
-
-```
-./vendor/bin/phpunit tests/unit
-```
-
-### Magento Integration Tests
-
-0. Configure test database in `dev/tests/integration/etc/install-config-mysql.php`. [Read more in the Magento docs.](https://devdocs.magento.com/guides/v2.4/test/integration/integration_test_execution.html) 
-
-1. Copy `tests/integration/phpunit.xml.dist` from the package to `dev/tests/integration/phpunit.xml` in your Magento installation.
-
-2. In that directory, run
-    ``` bash
-    ../../../vendor/bin/phpunit
-    ```
-
 
 ## Security
 
@@ -74,16 +51,9 @@ The MIT License (MIT). Please see [License File](LICENSE) for more information.
 
 [ico-version]: https://img.shields.io/packagist/v/integer-net/magento2-regenerate-coupon-uses.svg?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
-[ico-travis]: https://img.shields.io/travis/integer-net/magento2-regenerate-coupon-uses/master.svg?style=flat-square
-[ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/integer-net/magento2-regenerate-coupon-uses?style=flat-square
-[ico-code-quality]: https://img.shields.io/scrutinizer/g/integer-net/magento2-regenerate-coupon-uses.svg?style=flat-square
 [ico-maintainability]: https://img.shields.io/codeclimate/maintainability/integer-net/magento2-regenerate-coupon-uses?style=flat-square
 [ico-compatibility]: https://img.shields.io/badge/magento-2.4-brightgreen.svg?logo=magento&longCache=true&style=flat-square
 
 [link-packagist]: https://packagist.org/packages/integer-net/magento2-regenerate-coupon-uses
-[link-travis]: https://travis-ci.org/integer-net/magento2-regenerate-coupon-uses
-[link-scrutinizer]: https://scrutinizer-ci.com/g/integer-net/magento2-regenerate-coupon-uses/code-structure
-[link-code-quality]: https://scrutinizer-ci.com/g/integer-net/magento2-regenerate-coupon-uses
-[link-maintainability]: https://codeclimate.com/github/integer-net/magento2-regenerate-coupon-uses
 [link-author]: https://github.com/avstudnitz
 [link-contributors]: ../../contributors
